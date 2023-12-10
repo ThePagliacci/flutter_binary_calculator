@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-class ascii_conversion extends StatelessWidget {
-  const ascii_conversion({super.key});
+class Ascii_Conversion extends StatelessWidget {
+  const Ascii_Conversion({super.key});
 
   @override
   Widget build(BuildContext context) {
