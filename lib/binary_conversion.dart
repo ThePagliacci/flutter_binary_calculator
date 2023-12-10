@@ -26,24 +26,24 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
                               "C", "D","E", "F", "CE", "DEL", "Convert"];
   String system ="";
   String sonuc = "";
+  int ptr = -1;
   void convertBinaryFraction(String string, String system)
   {
     setState(() {
-      int ptr = -1;
 
       if(int.tryParse(string) !=null) sonuc +=string;
       else if(string == "CE") sonuc = "";
       else if(string == "DEL") sonuc = sonuc.substring(0, sonuc.length - 1);
       else if(string == ".")
       {
-        ptr = string.indexOf('.');
+        string.contains('.')? ptr = 1: ptr = -1;
         sonuc += ".";
       }
       else if(string == "Convert")
       {
         if(sonuc.length > 0)
         {
-          if(system == "decimal") BinarytoDecimal(sonuc, ptr); //handle the ptr
+          if(system == "decimal") BinarytoDecimal(sonuc, ptr);
           if(system == "octal") BinarytoOctal(sonuc, ptr);
           if(system == "hexa") BinarytoHexa(sonuc, ptr);
           sonuc = "";
@@ -51,11 +51,6 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
       }
     });
   }
-  void convertDecimaltoBinaryFraction(String string)
-  {
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -231,6 +226,7 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
               },
             ) ,
           ),
+
           Padding(
             padding: EdgeInsets.all(10.0),
             child:
@@ -246,7 +242,6 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
         ],
       ),
       ),
-
     );
   }
 }

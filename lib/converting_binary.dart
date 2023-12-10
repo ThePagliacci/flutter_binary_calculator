@@ -16,7 +16,6 @@ void BinarytoDecimal(String sonuc, int ptr)
   fractionTotal = 0;
   multiplier = 1;
   fmultiplier = 0.5;
-
   if(ptr != -1)
   {
     decimalString = sonuc.substring(0, sonuc.indexOf("."));
@@ -51,7 +50,6 @@ void BinarytoOctal(String sonuc,int ptr)
   fmultiplier = 0.5;
   double fmulti = 0.125;
   total = 0;
-  String foctotal = "";
   double kalan =0;
   double kalanf = 0;
   String FStirng = "";
@@ -77,9 +75,6 @@ void BinarytoOctal(String sonuc,int ptr)
       total = (total~/8).toDouble();
       octotal += kalan.toString();
     }
-    octotal = octotal.split('').reversed.join();
-
-
     for(int j= 0; j<=FStirng.length-1; j++)
     {
       if(FStirng[j] == '1') fractionTotal +=fmultiplier;
@@ -87,8 +82,6 @@ void BinarytoOctal(String sonuc,int ptr)
     }
     String decimalfraction = fractionTotal.toString();
     String integerString = decimalfraction.replaceAll('.', '').replaceFirst(RegExp('^0+'), '');
-    int integerValue = int.parse(integerString);
-
     //integerString is the integer equavlent of the fraction decimal number
     for(int j = 0; j<= integerString.length-1; j++)
     {
@@ -98,7 +91,6 @@ void BinarytoOctal(String sonuc,int ptr)
     fractionTotal = double.parse(octotal) + kalanf;
     output = fractionTotal.toString();
     print(output);    //convert that to string,
-
   }
   else
   {
@@ -116,11 +108,10 @@ void BinarytoOctal(String sonuc,int ptr)
       total = (total~/8).toDouble();
       octotal += kalan.toString();
     }
-    octotal = octotal.split('').reversed.join();
+    //octotal = octotal.split('').reversed.join();
     output = octotal.toString();
   }
-
-  print(output);
+  print( output);
 }
 void BinarytoHexa(sonuc, ptr)
 {
@@ -132,16 +123,17 @@ void BinarytoHexa(sonuc, ptr)
   double kalan =0;
   double kalanf = 0;
   String FStirng = "";
-  String finalString ="";
   String DStirng = "";
   String octotal = "";
+
+  double finalinteger = 0;
+  double finalfraction = 0;
   if(ptr != -1)
   {
     DStirng = sonuc.substring(0, sonuc.indexOf(".")); //integer part of the binary
     FStirng = sonuc.substring(sonuc.indexOf(".") +1,sonuc.length); //fraction part of the binary
     total =0;
     multiplier = 1;
-
     //integer part became decimal
     for(int i = DStirng.length-1 ; i>=0; i--)
     {
@@ -159,10 +151,8 @@ void BinarytoHexa(sonuc, ptr)
       }
       else
         octotal += kalan.toString();
-
     }
-    octotal = octotal.split('').reversed.join();
-
+    finalinteger = double.parse(octotal);
     for(int j= 0; j<=FStirng.length-1; j++)
     {
       if(FStirng[j] == '1') fractionTotal +=fmultiplier;
@@ -170,11 +160,11 @@ void BinarytoHexa(sonuc, ptr)
     }
     String decimalfraction = fractionTotal.toString();
     String integerString = decimalfraction.replaceAll('.', '').replaceFirst(RegExp('^0+'), '');
-    //int integerValue = int.parse(integerString);
-
     //integerString is the integer equavlent of the fraction decimal number
     for(int j = 0; j<= integerString.length-1; j++)
     {
+      kalanf +=fmulti;
+      fmulti *=0.0625;
       if(kalanf>9)
       {
         foctotal += String.fromCharCode('A'.codeUnitAt(0) + kalanf.toInt() - 10);
@@ -183,13 +173,10 @@ void BinarytoHexa(sonuc, ptr)
       {
         foctotal += kalanf.toString();
       }
-      kalanf +=fmulti;
-      fmulti *=0.0625;
     }
-    foctotal = octotal.split('').reversed.join();
-
-    output = (octotal.toString() + "." + foctotal.toString());
-
+    finalfraction = double.parse(foctotal);
+    finalinteger +=finalfraction;
+    output = (finalinteger.toString());
   }
   else
   {
@@ -199,7 +186,6 @@ void BinarytoHexa(sonuc, ptr)
       multiplier *=2;
     }
     //total has become the decimal number
-
     //converting decimal
     while(total >= 1)
     {
@@ -211,11 +197,8 @@ void BinarytoHexa(sonuc, ptr)
       }
       else
         octotal += kalan.toString();
-
     }
-    octotal = octotal.split('').reversed.join();
-
     output = (octotal.toString());
     }
-        print(output);
+    print(output);
   }
