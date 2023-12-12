@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
                     padding: EdgeInsets.all(20.0),
                     margin: EdgeInsets.all(10.0),
                     child: Center(
-                      child: Text("ASCII Conversion"),
+                      child: Text("ASCII Converter"),
                     ),
                   ),
                 ),
@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
                     padding: EdgeInsets.all(20.0),
                     margin: EdgeInsets.all(10.0),
                     child: Center(
-                        child: Text("Binary Calculation")),
+                        child: Text("Binary Calculator")),
                   ),
                 ),
                 ElevatedButton(onPressed: (){
@@ -100,7 +100,7 @@ class MyApp extends StatelessWidget {
                     padding: EdgeInsets.all(20.0),
                     margin: EdgeInsets.all(10.0),
                     child: Center(
-                      child: Text("Binary Conversion"),
+                      child: Text("Binary Converter"),
                     ),
                   ),
                 ),

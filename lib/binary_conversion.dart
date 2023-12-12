@@ -101,7 +101,7 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
               physics: NeverScrollableScrollPhysics(), // Disable scrolling
               itemCount: binaryButtonlar.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 6, crossAxisSpacing: 100, mainAxisSpacing: 0),
+                  crossAxisCount: 6, crossAxisSpacing: 20, mainAxisSpacing: 0,childAspectRatio: 2.0,),
               itemBuilder: (context, index) {
                 return InkWell(
                   splashColor: Colors.black,
