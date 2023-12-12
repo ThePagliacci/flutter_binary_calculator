@@ -1,5 +1,4 @@
 //import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'converting_binary.dart';
@@ -19,14 +18,10 @@ class Binary_Conversion extends StatefulWidget {
 
 class _Binary_ConversionState extends State<Binary_Conversion> {
 
-  var binaryButtonlar = ["0", "1", ".", "CE", "DEL", "Convert"];
-
-  var butonlar = ["0", "1", ".", "2", "3", "4", "5"
-                            , "6", "7", "8", "9", "B", "A",
-                              "C", "D","E", "F", "CE", "DEL", "Convert"];
+  var binaryButtonlar = ["0", "1", ".", "CE", "DEL", " "];
   String system ="";
   String sonuc = "";
-  int ptr = -1;
+  int ptr = 2;
   void convertBinaryFraction(String string, String system)
   {
     setState(() {
@@ -36,18 +31,18 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
       else if(string == "DEL") sonuc = sonuc.substring(0, sonuc.length - 1);
       else if(string == ".")
       {
-        string.contains('.')? ptr = 1: ptr = -1;
+        ptr = 1;
         sonuc += ".";
       }
-      else if(string == "Convert")
+      else if(string == " ")
       {
         if(sonuc.length > 0)
         {
           if(system == "decimal") BinarytoDecimal(sonuc, ptr);
           if(system == "octal") BinarytoOctal(sonuc, ptr);
           if(system == "hexa") BinarytoHexa(sonuc, ptr);
-          sonuc = "";
         }
+        sonuc = "";
       }
     });
   }
@@ -60,6 +55,7 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
         children: [
           Padding(
             padding: EdgeInsets.all(16.0),
+
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -73,7 +69,6 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
               ],
             ),
           ),
-
           Padding(
             padding: EdgeInsets.all(16.0),
             child: Row(
@@ -97,17 +92,16 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
               ],
             ),
           ),
-
           Container(
             height: 200.0,
-            width: 400.0,
+            width: 900.0,
             margin: EdgeInsets.all(8.0),
             padding: EdgeInsets.all(8.0),
             child: GridView.builder(
               physics: NeverScrollableScrollPhysics(), // Disable scrolling
               itemCount: binaryButtonlar.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 6, crossAxisSpacing: 15, mainAxisSpacing: 15),
+                  crossAxisCount: 6, crossAxisSpacing: 100, mainAxisSpacing: 0),
               itemBuilder: (context, index) {
                 return InkWell(
                   splashColor: Colors.black,
@@ -117,15 +111,26 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
                     });
                   },
                   child: Container(
-                    color: Colors.black,
+                    color: Colors.grey.shade700,
                     alignment: Alignment.center,
-                    child: Text(
-                      binaryButtonlar[index],
-                      style: TextStyle(
-                        fontSize: 19.0,
-                        fontFamily: "Silkscreen",
-                        color: Colors.white,
-                      ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Text(
+                          binaryButtonlar[index],
+                          style: TextStyle(
+                            fontSize: 29.0,
+                            fontFamily: "Silkscreen",
+                            color: Colors.white,
+                          ),
+                        ),
+                        if (index == 5) // Conditionally add icon for the first grid item
+                          Icon(
+                            Icons.swap_vert_circle, // Replace with the desired icon
+                            size: 40.0,
+                            color: Colors.white,
+                          ),
+                      ],
                     ),
                   ),
                 );
@@ -139,30 +144,49 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.all(20.0),
-                  child:ElevatedButton(onPressed: (){
-                    setState(() {
-                      system = "decimal";
-                    });                  },
-                 child: Text("Decimal")),
+                  padding: EdgeInsets.all(15.0),
+                  child: InkResponse(
+                  onTap: () {
+                      setState(() {
+                             system = "decimal";
+                        });
+                       },
+                 child: Text("Decimal",
+                     style: TextStyle(
+                   fontSize: 55.0,
+                   fontFamily: 'Dhurjati',
+                     ),
+                 )),
                 ),
                 Container(
-                  margin: EdgeInsets.all(20.0),
-                  child:ElevatedButton(onPressed: (){
-                    setState(() {
-                    system = "hexa";
-                  });
-                },
-                   child: Text("Hexadecimal")),
+                  padding: EdgeInsets.all(15.0),
+                  child: InkResponse(
+                      onTap: () {
+                        setState(() {
+                          system = "hexa";
+                        });
+                      },
+                      child: Text("Hexadecimal",
+                        style: TextStyle(
+                          fontSize: 55.0,
+                          fontFamily: 'Dhurjati',
+                        ),
+                      )),
                 ),
                 Container(
-                  margin: EdgeInsets.all(20.0),
-                  child:ElevatedButton(onPressed: (){
-                    setState(() {
-                      system = "octal";
-                    });
-                  },
-                 child: Text("Octal")),
+                  padding: EdgeInsets.all(15.0),
+                  child: InkResponse(
+                      onTap: () {
+                        setState(() {
+                          system = "octal";
+                        });
+                      },
+                      child: Text("Octal",
+                        style: TextStyle(
+                          fontSize: 55.0,
+                          fontFamily: 'Dhurjati',
+                        ),
+                      )),
                 ),
               ],
             ),
@@ -193,50 +217,20 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
           ),
 
           Container(
-            height: 500.0,
-            width: 800.0,
-            margin: EdgeInsets.all(8.0),
-            padding: EdgeInsets.all(8.0),
-            child: GridView.builder(
-              physics: NeverScrollableScrollPhysics(), // Disable scrolling
-              itemCount: butonlar.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 10, crossAxisSpacing: 35, mainAxisSpacing: 35),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  splashColor: Colors.black,
-                  onTap: () {
-                    setState(() {
-                      convertBinaryFraction(butonlar[index], system);
-                    });
-                  },
-                  child: Container(
-                    color: Colors.black,
-                    alignment: Alignment.center,
-                    child: Text(
-                      butonlar[index],
-                      style: TextStyle(
-                        fontSize: 19.0,
-                        fontFamily: "Silkscreen",
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ) ,
-          ),
-
-          Padding(
-            padding: EdgeInsets.all(10.0),
+            margin: EdgeInsets.all(50.0),
             child:
-            IconButton(
-              onPressed: ()
-              {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.home, size: 50.0,),
-
+            Align(
+              alignment: Alignment.center,
+              child: IconButton(
+                iconSize: 50.0 ,
+                onPressed: ()
+                {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.home,
+                  size: 50.0,
+                ),
+              ),
             ),
           ),
         ],
