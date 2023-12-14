@@ -114,7 +114,6 @@ void DecimaltoOctal(String sonuc,int ptr)
   }
   else //integer number
       {
-
     total = double.parse(sonuc);
     while(total >= 1)
     {
@@ -197,4 +196,9 @@ void DecimaltoHexa(String sonuc,int ptr)
     output = octotal;
   }
   print(output);
+}
+
+void main()
+{
+  DecimaltoHexa("14.875" , 1);
 }
