@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
-
+import 'converting_decimal.dart';
 class Binary_Calculation extends StatefulWidget {
   const Binary_Calculation({super.key});
 
@@ -9,38 +9,76 @@ class Binary_Calculation extends StatefulWidget {
 }
 
 class _Binary_CalculationState extends State<Binary_Calculation> {
-  var binaryButtonlar = ["0", "1", "2", "3","CE", "DEL", "4", "5", "6", "7", "+",
-                                   "-", ".",  "8", "9","*", "/" , "="];
-  //var operatorler = ["X", "-", "+", "/"];
-  String system ="";
+  var binaryButtonlar = ["1", "2", "3","4",".", "*","5", "6", "7","8", "+",
+                                   "-", "9",  "0", "CE","DEL", "/" , "=", " "];
+  String operator ="";
   String sonuc = "";
+  String system ="";
+  String gg = "";
   int ptr = 2;
-  /*void convertBinaryFraction(String string, String system)
-  {
-    setState(() {
 
-      if(int.tryParse(string) !=null) sonuc +=string;
-      else if(string == "CE") sonuc = "";
-      else if(string == "DEL") sonuc = sonuc.substring(0, sonuc.length - 1);
-      else if(string == ".")
-      {
-        ptr = 1;
-        sonuc += ".";
+  String calculator(String string, String system) {
+    String output = "";
+    setState(() {
+      if (int.tryParse(string) != null) {
+        sonuc += string;
       }
-      else if(string == " ")
-      {
-        if(sonuc.length > 0)
-        {
-          if(system == "decimal") BinarytoDecimal(sonuc, ptr);
-          if(system == "octal") BinarytoOctal(sonuc, ptr);
-          if(system == "hexa") BinarytoHexa(sonuc, ptr);
-        }
+      else if (string == "CE") { //delete all entered numbers
         sonuc = "";
+        operator = "";
+      } else if (string == ".") {
+        sonuc += string;
+        ptr = 1;
+      }
+      else if (string == "DEL") { //delete last entered number
+        if (sonuc.length > 0) { // if the last entered was an operator
+          if (sonuc[sonuc.length - 1] == "+" ||
+              sonuc[sonuc.length - 1] == "-" ||
+              sonuc[sonuc.length - 1] == "*" ||
+              sonuc[sonuc.length - 1] == "/") {
+            operator = "";
+          }
+          sonuc = sonuc.substring( 0, sonuc.length - 1); //if the last entered was a number
+        }
+      } else if (string == "=") { // handling the result
+        if (sonuc.length > 0 && operator.length != 0) {
+          var sayilar = sonuc.split(operator);
+          if (sayilar.length == 2) {
+            double sayi1 = double.parse(sayilar[0]);
+            double sayi2 = double.parse(sayilar[1]);
+            if (operator == "+") {
+              sonuc = (sayi1 + sayi2).toString();
+            } else if (operator == "-") {
+              sonuc = (sayi1 - sayi2).toString();
+            } else if (operator == "*") {
+              sonuc = (sayi1 * sayi2).toString();
+            } else if (operator == "/") {
+              sonuc = (sayi1 ~/ sayi2).toString();
+            }
+            operator = ""; //reset
+          }
+        }
+      }
+      else if (string == " ")
+      {
+        if(sonuc.length > 0) {
+          if (system == "binary") output = DecimaltoBinary(sonuc, ptr);
+          if (system == "octal") output = DecimaltoOctal(sonuc, ptr);
+          if (system == "hexa") output = DecimaltoHexa(sonuc, ptr);
+        }
+      }
+
+      else {
+        if (operator == "") { //updating the operator value
+          operator = string;
+          sonuc += string;
+        }
       }
     });
+
+    return output;
   }
 
-   */
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -86,7 +124,7 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
               ),
             ),
             Container(
-              height: 200.0,
+              height: 300.0,
               width: 900.0,
               margin: EdgeInsets.all(8.0),
               padding: EdgeInsets.all(8.0),
@@ -100,13 +138,15 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
                     splashColor: Colors.black,
                     onTap: () {
                       setState(() {
-                        //convertBinaryFraction(binaryButtonlar[index], system);
+                        gg = calculator(binaryButtonlar[index], system);
                       });
                     },
                     child: Container(
                       color: Colors.grey.shade700,
                       alignment: Alignment.center,
-                      child:
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
                           Text(
                             binaryButtonlar[index],
                             style: TextStyle(
@@ -115,6 +155,14 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
                               color: Colors.white,
                             ),
                           ),
+                          if (index == 18) // Conditionally add icon for the first grid item
+                            Icon(
+                              Icons.swap_vert_circle, // Replace with the desired icon
+                              size: 40.0,
+                              color: Colors.white,
+                            ),
+                        ],
+                      ),
                       ),
                   );
                 },
@@ -128,18 +176,19 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
                 children: [
                   Container(
                     padding: EdgeInsets.all(15.0),
-                    child: InkResponse(
-                        onTap: () {
-                          setState(() {
-                            system = "decimal";
-                          });
-                        },
-                        child: Text("Binary",
+              child: InkResponse(
+                onTap: () {
+                  setState(() {
+                    system = "binary";
+                  });
+                },
+                    child:Text("Binary",
                           style: TextStyle(
                             fontSize: 55.0,
                             fontFamily: 'Dhurjati',
                           ),
-                        )),
+                        ),
+                  ),
                   ),
                   Container(
                     padding: EdgeInsets.all(15.0),
@@ -149,27 +198,30 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
                             system = "hexa";
                           });
                         },
-                        child: Text("Hexadecimal",
+
+                      child: Text("Hexadecimal",
                           style: TextStyle(
                             fontSize: 55.0,
                             fontFamily: 'Dhurjati',
                           ),
-                        )),
+                        ),
                   ),
-                  Container(
+                  ),
+                    Container(
                     padding: EdgeInsets.all(15.0),
                     child: InkResponse(
-                        onTap: () {
-                          setState(() {
-                            system = "octal";
-                          });
-                        },
-                        child: Text("Octal",
+                      onTap: () {
+                        setState(() {
+                          system = "octal";
+                        });
+                      },
+                    child: Text("Octal",
                           style: TextStyle(
                             fontSize: 55.0,
                             fontFamily: 'Dhurjati',
                           ),
-                        )),
+                        ),
+                  ),
                   ),
                 ],
               ),
@@ -184,8 +236,8 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
                     child: SizedBox(
                       height: 100,
                       width: MediaQuery.of(context).size.width * 0.9,
-                     /* child: Text(
-                         output,
+                      child: Text(
+                        gg,
                         textAlign: TextAlign.end,
                         style: TextStyle(
                           fontFamily: "Silkscreen",
@@ -193,7 +245,6 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
                           height: 2,
                         ),
                       ),
-              */
                     ),
                   ),
                 ],
@@ -217,6 +268,7 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
                 ),
               ),
             ),
+
           ],
         ),
       ),
