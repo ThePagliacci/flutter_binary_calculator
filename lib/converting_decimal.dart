@@ -1,30 +1,19 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'binary_calculation.dart';
-double kalan =0;
-int kalanf = 0;
-double kal = 0;
-double frac = 0;
-String output = "";
-String ctotal = ""; //binary fraction part
-String octotal = ""; //binary integer part
-double total =0; //integer decimal part
-double foctotal =0;//fraction decimal part
-String Dstring = "";
-int length =6;
-String Fstring = "" ;
-void DecimaltoBinary(String sonuc, int ptr) //ptr 1 = fraction 2 = integer
+String DecimaltoBinary(String sonuc, int ptr) //ptr 1 = fraction 2 = integer
 {
+  int length =6;
   double multiplier = 2;
-  output = "";
-  kalan =0;
-  kalanf = 0;
-  ctotal = ""; //binary fraction part
-  octotal = ""; //binary integer part
-  total =0; //integer decimal part
-  foctotal =0;//fraction decimal part
-  Dstring = "";
-  Fstring = "" ;
+  String binaryString = "";
+  double kalan =0;
+  int kalanf = 0;
+  String ctotal = ""; //binary fraction part
+  String octotal = ""; //binary integer part
+  double total =0; //integer decimal part
+  double foctotal =0;//fraction decimal part
+  String Dstring = "";
+  String Fstring = "" ;
 
   if(ptr == 1) //fractional number
       {
@@ -43,19 +32,22 @@ void DecimaltoBinary(String sonuc, int ptr) //ptr 1 = fraction 2 = integer
     octotal = octotal.split('').reversed.join();
 
     //fraction to binary
-    while(foctotal != 1.00 && length > 1) //work on the condition
+    while(foctotal != 1.0 && length > 1) //work on the condition
         {
       String getfraction = "0" + foctotal.toString().
       substring(foctotal.toString().indexOf("."),
           foctotal.toString().length);
-      kalanf = foctotal.truncate();
-      ctotal += kalanf.toString();
       foctotal = double.parse(getfraction);
       foctotal *= multiplier;
+      kalanf = foctotal.truncate();
+      ctotal += kalanf.toString();
+      if(foctotal == "1.0") {
+        ctotal += "1";
+        break;
+      }
       length --;
     }
-    output = octotal + "." + ctotal;
-
+    binaryString = octotal + "." + ctotal;
   }
   else //integer number
       {
@@ -68,17 +60,24 @@ void DecimaltoBinary(String sonuc, int ptr) //ptr 1 = fraction 2 = integer
       octotal =  octotal.replaceAll(RegExp(r'\.0$'), '');
     }
     octotal = octotal.split('').reversed.join();
-    output = octotal;
+    binaryString = octotal;
   }
-  print(output);
+  return binaryString;
 }
-void DecimaltoOctal(String sonuc,int ptr)
+String DecimaltoOctal(String sonuc,int ptr)
 {
-  output = "";
+  int length =6;
+  String octalString = "";
   double multiplier = 8;
-  kal = 0;
-  kalan = 0;
-  kalanf = 0;
+  String Dstring = "";
+  String Fstring = "" ;
+  String ctotal = ""; //binary fraction part
+  double kal = 0;
+  double foctotal =0;//fraction decimal part
+  double kalan = 0;
+  String octotal = ""; //binary integer part
+  int kalanf = 0;
+  double total =0; //integer decimal part
   if(ptr == 1) //fractional number
       {
     Dstring = sonuc.substring(0, sonuc.indexOf(".")); //integer part of the binary
@@ -96,21 +95,22 @@ void DecimaltoOctal(String sonuc,int ptr)
     octotal = octotal.split('').reversed.join();
 
     //fraction to binary
-    while(foctotal != 1.00 && length > 1) //work on the condition
+    while(foctotal != 1.0 && length > 1) //work on the condition
         {
       String getfraction = "0" + foctotal.toString().
       substring(foctotal.toString().indexOf("."),
           foctotal.toString().length);
-      kalanf = foctotal.truncate();
-      ctotal += kalanf.toString();
       foctotal = double.parse(getfraction);
       foctotal *= multiplier;
-      ctotal = ctotal.replaceFirst(RegExp('^0+'), '');
-
+      kalanf = foctotal.truncate();
+      ctotal += kalanf.toString();
+      if(foctotal == "1.0") {
+        ctotal += "1";
+        break;
+      }
       length --;
     }
-    output = octotal + "." + ctotal;
-
+    octalString = octotal + "." + ctotal;
   }
   else //integer number
       {
@@ -120,21 +120,27 @@ void DecimaltoOctal(String sonuc,int ptr)
       kalan = total%8;
       total = (total~/8).toDouble();
       octotal += kalan.toString();
+      octotal =  octotal.replaceAll(RegExp(r'\.0$'), '');
     }
     octotal = octotal.split('').reversed.join();
-    octotal =  octotal.replaceAll(RegExp(r'\.0$'), '');
-    output = octotal;
+    octalString = octotal;
   }
-  print(output);
+  return octalString;
 }
-void DecimaltoHexa(String sonuc,int ptr)
+String DecimaltoHexa(String sonuc,int ptr)
 {
-  output = "";
+  String Dstring = "";
+  String Fstring = "" ;
+  int length =6;
+  String hexaString = "";
   double multiplier = 16;
-  kal = 0;
-  kalan = 0;
-  kalanf = 0;
-  total = 0;
+  double kal = 0;
+  double foctotal =0;//fraction decimal part
+  double kalan = 0;
+  String octotal = ""; //binary integer part
+  String ctotal = ""; //binary fraction part
+  int kalanf = 0;
+  double total =0; //integer decimal part
 
   if(ptr == 1) //fractional number
       {
@@ -157,25 +163,23 @@ void DecimaltoHexa(String sonuc,int ptr)
     }
     octotal = octotal.split('').reversed.join();
     //fraction to binary
-    while(foctotal != 1.00 && length > 1) {
+    while(foctotal != 1.0 && length > 1) //work on the condition
+        {
       String getfraction = "0" + foctotal.toString().
       substring(foctotal.toString().indexOf("."),
-          foctotal
-              .toString()
-              .length);
-          kalanf = foctotal.truncate();
-
-          if (kalanf > 9) {
-            ctotal += String.fromCharCode('A'.codeUnitAt(0) + kalanf.toInt() - 10);
-          }
-          else
-            ctotal += kalanf.toString();
-          foctotal = double.parse(getfraction);
-          foctotal *= multiplier;
-          length --;
+          foctotal.toString().length);
+      foctotal = double.parse(getfraction);
+      foctotal *= multiplier;
+      kalanf = foctotal.truncate();
+      ctotal += kalanf.toString();
+      if(foctotal == "1.0") {
+        ctotal += "1";
+        break;
+      }
+      length --;
     }
     ctotal = ctotal.replaceFirst(RegExp('^0+'), '');
-    output = octotal + "." + ctotal;
+    hexaString = octotal + "." + ctotal;
   }
   else //integer number
   {
@@ -193,12 +197,15 @@ void DecimaltoHexa(String sonuc,int ptr)
       octotal =  octotal.replaceAll(RegExp(r'\.0$'), '');
       octotal = octotal.split('').reversed.join();
     }
-    output = octotal;
+    hexaString = octotal;
   }
-  print(output);
+  return hexaString;
 }
 
 void main()
 {
-  DecimaltoHexa("14.875" , 1);
+  print(DecimaltoBinary("14.25" , 1));
+  print(DecimaltoOctal("14.25" , 1));
+  print(DecimaltoHexa("14.25" , 1));
+
 }
