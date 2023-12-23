@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'converting_ascii.dart';
+import 'main.dart';
 
 class Ascii_Conversion extends StatefulWidget {
   const Ascii_Conversion({super.key});
@@ -11,47 +12,146 @@ class Ascii_Conversion extends StatefulWidget {
 class _Ascii_ConversionState extends State<Ascii_Conversion> {
   var binaryButtonlar = ["0", "1", "CE", "DEL", " "];
 
-  var asciiButtonlar =  ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
-                                    "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "CE", "DEL", " "];
-  String system ="";
+  var asciiButtonlar = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+    "CE",
+    "DEL",
+    "_"
+  ];
   String sonuc = "";
-  int ptr = 2;
-  /*void convertBinaryFraction(String string, String system)
-  {
-    setState(() {
+  String sonuc1 = "";
+  String gg1 = "";
+  String gg0 = "";
+  bool MassWidget = false;
 
-      if(int.tryParse(string) !=null) sonuc +=string;
-      else if(string == "CE") sonuc = "";
-      else if(string == "DEL") sonuc = sonuc.substring(0, sonuc.length - 1);
-      else if(string == ".")
-      {
-        ptr = 1;
-        sonuc += ".";
-      }
-      else if(string == " ")
-      {
-        if(sonuc.length > 0)
-        {
-          if(system == "decimal") BinarytoDecimal(sonuc, ptr);
-          if(system == "octal") BinarytoOctal(sonuc, ptr);
-          if(system == "hexa") BinarytoHexa(sonuc, ptr);
-        }
-        sonuc = "";
-      }
-    });
+  Widget mass(BuildContext context) {
+    return Container(
+      child: Text(
+        "Please Enter 7-bits Binary digits",
+        style: TextStyle(fontSize: 20.0,
+            fontFamily: 'Dhurjati',
+            color: Colors.red
+        ),
+      ),
+    );
   }
 
-   */
+  String ConvertBinary(String string)
+  {
+    String output = "";
+    setState(() {
+      if (int.tryParse(string) != null)
+        sonuc += string;
+      else if (string == "CE") {
+        MassWidget = false;
+        sonuc = "";
+        sonuc1 = "";
+        gg0 = "";
+        gg1 = "";
+      }
+      else if (string == "DEL") sonuc = sonuc.substring(0, sonuc.length - 1);
+      else if (string == " ") {
+        if (sonuc.length > 0) {
+            if (sonuc.length % 7 == 0) {
+              output = BinarytoAscii(sonuc);
+            }
+            else if (sonuc.length % 7 != 0) {
+              MassWidget = true;
+            }
+          }
+         sonuc = "";
+      }
+    });
+    return output;
+  }
+
+  String ConvertAscii(String string)
+  {
+    String output = "";
+    setState(() {
+      if (string.isNotEmpty && string != "CE" && string != "DEL" && string!= "_")
+      {
+        sonuc1 += string;
+      }
+      else if (string == "CE") {
+        sonuc = "";
+        gg0 = "";
+        gg1 = "";
+        sonuc1 = "";
+      }
+      else if (string == "DEL") sonuc1 = sonuc1.substring(0, sonuc1.length - 1);
+      else if (string == "_") {
+        if (sonuc1.length > 0) {
+          output = AsciitoBinary(sonuc1);
+        }
+        print(sonuc1);
+        sonuc1 = "";
+      }
+    });
+    return output;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       //backgroundColor: Colors.indigo.shade200,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
               padding: EdgeInsets.all(16.0),
-
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -72,9 +172,12 @@ class _Ascii_ConversionState extends State<Ascii_Conversion> {
                     color: Colors.grey.shade300,
                     child: SizedBox(
                       height: 100,
-                      width: MediaQuery.of(context).size.width * 0.9,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.9,
                       child: Text(
-                        sonuc,
+                        gg0 == ""? sonuc: gg0,
                         textAlign: TextAlign.end,
                         style: TextStyle(
                           fontFamily: "Silkscreen",
@@ -96,13 +199,16 @@ class _Ascii_ConversionState extends State<Ascii_Conversion> {
                 physics: NeverScrollableScrollPhysics(), // Disable scrolling
                 itemCount: binaryButtonlar.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5, crossAxisSpacing: 20, mainAxisSpacing: 20,childAspectRatio: 3.0,),
+                  crossAxisCount: 5,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                  childAspectRatio: 3.0,),
                 itemBuilder: (context, index) {
                   return InkWell(
                     splashColor: Colors.black,
                     onTap: () {
                       setState(() {
-                        //convertBinaryFraction(binaryButtonlar[index], system);
+                        gg1 = ConvertBinary(binaryButtonlar[index]);
                       });
                     },
                     child: Container(
@@ -119,9 +225,11 @@ class _Ascii_ConversionState extends State<Ascii_Conversion> {
                               color: Colors.white,
                             ),
                           ),
-                          if (index == 4) // Conditionally add icon for the first grid item
+                          if (index ==
+                              4) // Conditionally add icon for the first grid item
                             Icon(
-                              Icons.swap_vert_circle, // Replace with the desired icon
+                              Icons.swap_vert_circle,
+                              // Replace with the desired icon
                               size: 40.0,
                               color: Colors.white,
                             ),
@@ -130,28 +238,27 @@ class _Ascii_ConversionState extends State<Ascii_Conversion> {
                     ),
                   );
                 },
-              ) ,
+              ),
             ),
+            Container(
+              child: MassWidget
+                  ? mass(context)
+                  : SizedBox(), // Conditionally display the widget
+            ),
+
             Padding(
               padding: EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(15.0),
-                    child: InkResponse(
-                        onTap: () {
-                          setState(() {
-                            system = "decimal";
-                          });
-                        },
-                        child: Text("ASCII",
-                          style: TextStyle(
-                            fontSize: 55.0,
-                            fontFamily: 'Dhurjati',
-                          ),
-                        )),
-                  ),
+                      padding: EdgeInsets.all(15.0),
+                      child: Text("ASCII",
+                        style: TextStyle(
+                          fontSize: 55.0,
+                          fontFamily: 'Dhurjati',
+                        ),
+                      )),
                 ],
               ),
             ),
@@ -163,24 +270,26 @@ class _Ascii_ConversionState extends State<Ascii_Conversion> {
                     color: Colors.grey.shade300,
                     child: SizedBox(
                       height: 100,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      /* child: Text(
-                         output,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.9,
+                      child: Text(
+                        gg1== "" ? sonuc1: gg1,
                         textAlign: TextAlign.end,
                         style: TextStyle(
-                          fontFamily: "Silkscreen",
+                          fontFamily: "Dhurjati",
                           fontSize: 45,
                           height: 2,
                         ),
                       ),
-              */
                     ),
                   ),
                 ],
               ),
             ),
             Container(
-              height: 400.0,
+              height: 500.0,
               width: 1000.0,
               margin: EdgeInsets.all(8.0),
               padding: EdgeInsets.all(8.0),
@@ -188,13 +297,16 @@ class _Ascii_ConversionState extends State<Ascii_Conversion> {
                 physics: NeverScrollableScrollPhysics(), // Disable scrolling
                 itemCount: asciiButtonlar.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 7, crossAxisSpacing: 20, mainAxisSpacing: 20,childAspectRatio: 3),
+                    crossAxisCount: 8,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 2),
                 itemBuilder: (context, index) {
                   return InkWell(
                     splashColor: Colors.black,
                     onTap: () {
                       setState(() {
-                        //convertBinaryFraction(binaryButtonlar[index], system);
+                        gg0 = ConvertAscii(asciiButtonlar[index]);
                       });
                     },
                     child: Container(
@@ -207,13 +319,15 @@ class _Ascii_ConversionState extends State<Ascii_Conversion> {
                             asciiButtonlar[index],
                             style: TextStyle(
                               fontSize: 29.0,
-                              fontFamily: "Silkscreen",
+                              fontFamily: "Dhurjati",
                               color: Colors.white,
                             ),
                           ),
-                          if (index == 28) // Conditionally add icon for the first grid item
+                          if (index ==
+                              54) // Conditionally add icon for the first grid item
                             Icon(
-                              Icons.swap_vert_circle, // Replace with the desired icon
+                              Icons.swap_vert_circle,
+                              // Replace with the desired icon
                               size: 40.0,
                               color: Colors.white,
                             ),
@@ -223,16 +337,15 @@ class _Ascii_ConversionState extends State<Ascii_Conversion> {
                   );
                 },
               ),
-            ) ,
+            ),
             Container(
               margin: EdgeInsets.all(50.0),
               child:
               Align(
                 alignment: Alignment.center,
                 child: IconButton(
-                  iconSize: 50.0 ,
-                  onPressed: ()
-                  {
+                  iconSize: 50.0,
+                  onPressed: () {
                     Navigator.pop(context);
                   },
                   icon: const Icon(Icons.home,
