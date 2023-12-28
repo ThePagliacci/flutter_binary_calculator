@@ -208,4 +208,8 @@ void main()
   print(DecimaltoOctal("14.25" , 1));
   print(DecimaltoHexa("14.25" , 1));
 
+  print(DecimaltoBinary("6" , 0));
+  print(DecimaltoOctal("6" , 0));
+  print(DecimaltoHexa("6" , 0));
+
 }

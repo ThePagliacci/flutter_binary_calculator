@@ -58,6 +58,11 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
             operator = ""; //reset
           }
         }
+        if(!string.contains("."))
+        {
+          sonuc = sonuc.substring(0, sonuc.length - 2);
+        }
+         print(sonuc);
       }
       else if (string == " ")
       {
