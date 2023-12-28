@@ -58,14 +58,15 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
             operator = ""; //reset
           }
         }
-        if(!string.contains("."))
+        if(sonuc.contains(".0"))
         {
           sonuc = sonuc.substring(0, sonuc.length - 2);
+          ptr = 0;
         }
-         print(sonuc);
       }
       else if (string == " ")
       {
+
         if(sonuc.length > 0) {
           if (system == "binary") output = DecimaltoBinary(sonuc, ptr);
           if (system == "octal") output = DecimaltoOctal(sonuc, ptr);
