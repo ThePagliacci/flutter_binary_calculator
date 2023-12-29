@@ -7,17 +7,15 @@ import 'binary_calculation.dart';
 void main() => runApp(MaterialApp(
   home:MyApp(),
   routes: {
-        '/binary_conversion': (context) => Binary_Conversion(),
-        '/binary_calculation': (context) => Binary_Calculation(),
-        '/ascii_conversion': (context) => Ascii_Conversion(),
+    '/binary_conversion': (context) => Binary_Conversion(),
+    '/binary_calculation': (context) => Binary_Calculation(),
+    '/ascii_conversion': (context) => Ascii_Conversion(),
   },
   initialRoute: '/',
 ),
 );
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +79,7 @@ class MyApp extends StatelessWidget {
                     padding: EdgeInsets.all(20.0),
                     margin: EdgeInsets.all(10.0),
                     child: Center(
-                        child: Text("Binary Calculator")),
+                        child: Text("Decimal Convertor")),
                   ),
                 ),
                 ElevatedButton(onPressed: (){
