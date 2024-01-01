@@ -23,7 +23,7 @@ String AsciitoBinary(String string)
         octotal += kalan.toString();
         octotal =  octotal.replaceAll(RegExp(r'\.0$'), '');
       }
-      octotal = octotal.split('').reversed.join();
+      octotal = octotal.split('').reversed.join() + "  ";
       finalString +=octotal;
     }
   return finalString;
@@ -53,6 +53,7 @@ String BinarytoAscii(String string)
           multiplier *= 2;
         }
         finalString += String.fromCharCode(total);
+        finalString +=" ";
       }
     }
       //convert decimal to ascii
@@ -60,6 +61,6 @@ String BinarytoAscii(String string)
 }
 void main()
 {
-  AsciitoBinary("he");
-  //BinarytoAscii("11010001101000");
+  //print(AsciitoBinary("he"));
+  print(BinarytoAscii("11010001101000"));
 }
