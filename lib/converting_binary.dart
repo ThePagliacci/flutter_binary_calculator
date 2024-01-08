@@ -44,7 +44,6 @@ String BinarytoDecimal(String sonuc, int ptr)
 String BinarytoOctal(String sonuc,int ptr)
 {
   double multi = 8;
-  double kal = 0;
   String octalOutput ="";
   double fmultiplier = 0.5;
   double kalan = 0;
@@ -127,7 +126,6 @@ String BinarytoHexa(sonuc, ptr)
   String hexaOutput = "";
   int length =6;
   double multi = 16;
-  double kal = 0;
   double total = 0;
   double fmultiplier = 0.5;
   double kalan = 0;
@@ -139,6 +137,7 @@ String BinarytoHexa(sonuc, ptr)
   String fractionalString ="";
   if(ptr == 1) //fractional number
       {
+
     Dstring = sonuc.substring(0, sonuc.indexOf(".")); //integer part of the binary
     Fstring = "0" + sonuc.substring(sonuc.indexOf("."),sonuc.length); //fraction part of the binary
 
@@ -159,7 +158,7 @@ String BinarytoHexa(sonuc, ptr)
         octotal += kalan.toString();
       octotal = octotal.replaceAll(RegExp(r'\.0$'), '');
     }
-
+    //fractionalString = sonuc.contains(".") ? sonuc.substring(sonuc.indexOf(".")+1, sonuc.length) : "";
     fractionalString = sonuc.substring(sonuc.indexOf(".")+1, sonuc.length);
     for(int j= 0; j<=fractionalString.length-1; j++)
     {

@@ -66,14 +66,12 @@ class _Binary_CalculationState extends State<Binary_Calculation> {
       }
       else if (string == " ")
       {
-
         if(sonuc.length > 0) {
           if (system == "binary") output = DecimaltoBinary(sonuc, ptr);
           if (system == "octal") output = DecimaltoOctal(sonuc, ptr);
           if (system == "hexa") output = DecimaltoHexa(sonuc, ptr);
         }
       }
-
       else {
         if (operator == "") { //updating the operator value
           operator = string;

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'converting_binary.dart';
+import 'binary_addition_multiplication.dart';
 void main() => runApp(MaterialApp(
   home:Binary_Conversion(),
   routes: {
@@ -18,11 +19,44 @@ class Binary_Conversion extends StatefulWidget {
 
 class _Binary_ConversionState extends State<Binary_Conversion> {
 
-  var binaryButtonlar = ["0", "1", ".", "CE", "DEL", " "];
+  var binaryButtonlar = ["0", "1", ".", "CE", "DEL", " ", "*", "+", "AND", "OR" , "="];
   String system ="";
   String sonuc = "";
+  String sonuc1 = "";
   String gg  = "";
+  String g = "";
+  String operator = "";
   int ptr = 2;
+  bool Binary_Logic = false;
+
+  Widget BiLogic(BuildContext context)
+  {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            "Result",
+            style: TextStyle(
+              fontSize: 55.0,
+              fontFamily: 'Dhurjati',
+            ),
+          ),
+          SizedBox(width: 36.0),
+          Text(
+            g,
+            style: TextStyle(
+              fontSize: 45.0,
+              fontFamily: 'Silkscreen',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
   String convertBinaryFraction(String string, String system)
   {
     String output = "";
@@ -37,24 +71,95 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
       }
       else if(string == " ")
       {
+        output ="";
         if(sonuc.length > 0)
         {
           if(system == "decimal")
-            {
-              output = BinarytoDecimal(sonuc, ptr);
-            }
+          {
+            output = BinarytoDecimal(sonuc, ptr);
+          }
           else if(system == "octal")
-            {
-              output = BinarytoOctal(sonuc, ptr);
-            }
+          {
+            output = BinarytoOctal(sonuc, ptr);
+          }
           else if(system == "hexa")
-            {
-              output = BinarytoHexa(sonuc, ptr);
-            }
+          {
+            output = BinarytoHexa(sonuc, ptr);
+          }
         }
         sonuc = "";
       }
+      if(string == "OR")
+        sonuc+=" OR ";
+      if(string == "AND")
+        sonuc+=" AND ";
+      if(string == "+")
+        sonuc+=" + ";
+      if(string == "*")
+        sonuc+=" * ";
     });
+    return output;
+  }
+
+  String BinaryLogic(String string)
+  {
+    String output = "";
+    String b1= "";
+    String b2 = "";
+    setState(() {
+      if (int.tryParse(string) != null) {
+        sonuc1 += string;
+      }
+      else if (string == "CE") { //delete all entered numbers
+        sonuc1 = "";
+        Binary_Logic = false;
+        operator = "";
+      }
+      else if (string == "DEL") { //delete last entered number
+        if (sonuc1.length > 0) { // if the last entered was an operator
+          if (sonuc1[sonuc1.length - 1] == "+" ||
+              sonuc1[sonuc1.length - 1] == "*" ){
+            operator = "";
+          }
+          sonuc1 = sonuc1.substring( 0, sonuc1.length - 1); //if the last entered was a number
+        }
+      }
+      else if (string == "=") { // handling the result
+        if (sonuc1.length > 0 && operator.length != 0) {
+          var sayilar = sonuc1.split(operator);
+          if (sayilar.length == 2) {
+            int sayi1 = int.parse(sayilar[0]);
+            int sayi2 = int.parse(sayilar[1]);
+            b1 = sayi1.toString();
+            b2 = sayi2.toString();
+            if (operator == "+") {
+              print(sonuc1);
+              sonuc1 = binaryAdd(b1,b2);
+            } else if (operator == "*") {
+              sonuc1 = binaryMultiply(b1, b2);
+            } else if (operator == "AND") {
+              if(sayi1 ==1 && sayi2 == 1) sonuc1 = "1";
+              else sonuc1 = "0";
+            } else if (operator == "OR") {
+              if (sayi1 == 1 || sayi2 == 1)
+                sonuc1 = "1";
+              else
+                sonuc1 = "0";
+            }
+            operator = ""; //reset
+          }
+        }
+        output = sonuc1;
+        Binary_Logic = true;
+      }
+      else {
+        if (operator == "") { //updating the operator value
+          operator = string;
+          sonuc1 += string;
+        }
+      }
+    });
+
     return output;
   }
   @override
@@ -73,7 +178,6 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
                     style: TextStyle(
                       fontSize: 55.0,
                       fontFamily: 'Dhurjati',
-
                     ),
                   ),
                 ],
@@ -102,6 +206,7 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
                 ],
               ),
             ),
+
             Container(
               height: 200.0,
               width: 900.0,
@@ -111,13 +216,14 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
                 physics: NeverScrollableScrollPhysics(), // Disable scrolling
                 itemCount: binaryButtonlar.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 6, crossAxisSpacing: 20, mainAxisSpacing: 0,childAspectRatio: 2.0,),
+                  crossAxisCount: 6, crossAxisSpacing: 20, mainAxisSpacing: 20,childAspectRatio: 2.0,),
                 itemBuilder: (context, index) {
                   return InkWell(
                     splashColor: Colors.black,
                     onTap: () {
                       setState(() {
                         gg = convertBinaryFraction(binaryButtonlar[index], system);
+                        g = BinaryLogic(binaryButtonlar[index]);
                       });
                     },
                     child: Container(
@@ -147,6 +253,13 @@ class _Binary_ConversionState extends State<Binary_Conversion> {
                 },
               ) ,
             ),
+
+            Container(
+              child: Binary_Logic ?
+              BiLogic(context)
+                  : SizedBox(), // Conditionally display the widget
+            ),
+
             Padding(
               padding: EdgeInsets.all(16.0),
               child: Row(
